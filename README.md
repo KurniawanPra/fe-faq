@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FAQ Portal – PT INL
 
-## Getting Started
+Pusat bantuan dan portal FAQ untuk PT INL, dibangun dengan **Next.js 16** dan **TypeScript**.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+
+| Layer      | Teknologi                                       |
+| :--------- | :---------------------------------------------- |
+| Framework  | Next.js 16 (App Router)                         |
+| Language   | TypeScript                                      |
+| Styling    | CSS Modules + Tailwind CSS v4                   |
+| State      | React `useState` / `useSearchParams`            |
+| Font       | DM Sans, DM Mono, Instrument Serif (Google CDN) |
+
+---
+
+## Struktur Folder
+
+```
+faq-inl/
+│
+├── app/                        # Next.js App Router (routing only)
+│   ├── (landing)/              # Route group: halaman publik
+│   │   ├── layout.tsx          # Layout landing (Navbar + SearchHeader)
+│   │   └── page.tsx            # Halaman utama FAQ
+│   │
+│   ├── dashboard/              # Route group: admin dashboard
+│   │   ├── layout.tsx          # Layout dashboard (Sidebar)
+│   │   ├── page.tsx            # Halaman overview
+│   │   ├── questions/          # Kelola FAQ
+│   │   │   └── page.tsx
+│   │   └── user-inquiries/     # Kelola pertanyaan user
+│   │       └── page.tsx
+│   │
+│   ├── api/                    # Next.js API Routes (mock/stub)
+│   │   ├── faqs/route.ts
+│   │   ├── questions/route.ts
+│   │   ├── topics/route.ts
+│   │   └── user-inquiries/route.ts
+│   │
+│   ├── login/
+│   │   └── page.tsx
+│   │
+│   ├── globals.css             # Global CSS tokens & base reset
+│   └── layout.tsx              # Root layout (html + body)
+│
+├── src/                        # Source code (komponen, tipe, data)
+│   ├── components/             # UI Components (masing-masing 1 folder)
+│   │   ├── Navbar/
+│   │   │   ├── Navbar.tsx
+│   │   │   └── Navbar.module.css
+│   │   ├── SearchHeader/
+│   │   │   ├── SearchHeader.tsx
+│   │   │   └── SearchHeader.module.css
+│   │   ├── FAQCards/
+│   │   │   ├── FAQCards.tsx
+│   │   │   └── FAQCards.module.css
+│   │   ├── DashboardSidebar/
+│   │   │   ├── DashboardSidebar.tsx
+│   │   │   └── DashboardSidebar.module.css
+│   │   └── index.ts            # Barrel export
+│   │
+│   ├── data/                   # Data statis / mock
+│   │   └── faq-data.ts
+│   │
+│   └── types/                  # TypeScript interfaces & types
+│       └── faq.ts
+│
+├── public/                     # Aset statis
+│   └── img/
+│       └── logo.png
+│
+├── docs/                       # Dokumentasi
+│   └── API.md                  # Kontrak API untuk backend (Laravel)
+│
+├── next.config.ts
+├── tsconfig.json               # @/* alias → src/*
+├── package.json
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cara Menjalankan
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev
+```
 
-## Learn More
+Buka [http://localhost:3000](http://localhost:3000).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Path Alias
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Alias             | Resolves To            |
+| :---------------- | :--------------------- |
+| `@/components`    | `src/components/`      |
+| `@/types`         | `src/types/`           |
+| `@/data`          | `src/data/`            |
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Dokumentasi API
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Lihat [`docs/API_DOCUMENTATION.md`](./docs/API_DOCUMENTATION.md) untuk detail endpoint, parameter request, dan format response API yang digunakan.
+# fe-faq
