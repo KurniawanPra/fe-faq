@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scrolled {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  margin-left: 12px;
+  margin-top: 5px;
+}
+
+.logoName {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #111;
+  text-transform: none;
+}
+
+.logoTagline {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #999;
+  text-transform: none;
+  margin-top: 3px;
+}
+
+/* ── Login Button ── */
+.btnLogin {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  background: #111;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.btnLogin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #333;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 8px;
+}
+
+.btnLogin:hover::before {
+  transform: translateY(0);
+}
+
+.btnLogin:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.btnLogin:active {
+  transform: translateY(0);
+}
+
+.btnLogin span,
+.btnLogin svg {
+  position: relative;
+  z-index: 1;
+}
+
+.btnLogin svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.btnLogin:hover svg {
+  transform: translateX(2px);
+}
+
+/* ── Dashboard & Logout Buttons ── */
+.btnDashboard {
+  composes: btnLogin;
+  background: #111;
+}
+
+.btnLogout {
+  composes: btnLogin;
+  background: transparent;
+  color: #ef4444;
+  border: 1.5px solid #fee2e2;
+}
+
+.btnLogout::before {
+  background: #fee2e2;
+}
+
+.btnLogout:hover {
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.1);
+  border-color: transparent;
+}
+
+.authGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .inner {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .inner {
+    padding: 0 16px;
+  }
+
+  .logoTagline {
+    display: none;
+  }
+
+  .logoName {
+    font-size: 14px;
+  }
+  
+  .authGroup {
+    gap: 8px;
+  }
+  
+  .btnLogin span, .btnDashboard span, .btnLogout span {
+    font-size: 12px;
+    padding: 0 4px;
+  }
+}

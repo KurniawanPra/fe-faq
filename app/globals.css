@@ -1,26 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f7f6f3;
+  --foreground: #0f0f0f;
+
+  /* Ink scale */
+  --ink:   #0f0f0f;
+  --ink-2: #444;
+  --ink-3: #888;
+
+  /* Surface & border */
+  --surface: #f7f6f3;
+  --white:   #ffffff;
+  --line:    rgba(0, 0, 0, 0.06);
+
+  /* Dashboard */
+  --sidebar-width: 260px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ─── Base Reset ─────────────────────────────────────────────────────────────*/
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
+  margin: 0;
+  padding: 0;
   background: var(--background);
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ─── Dashboard Layout ──────────────────────────────────────────────────────
+   Sidebar kiri fixed 240px, konten di kanan.
+*/
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--background);
+  font-family: 'Inter', sans-serif;
+}
+
+.dashboard-main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 40px;
+  background: #fdfcfb;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .dashboard-main {
+    padding: 32px 36px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 220px;
+  }
+
+  .dashboard-main {
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+
+  .dashboard-main {
+    margin-left: 0;
+    padding: 20px 16px;
+    padding-top: 72px; /* ruang untuk hamburger button */
+  }
 }
