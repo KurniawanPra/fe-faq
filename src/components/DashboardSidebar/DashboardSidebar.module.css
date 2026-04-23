@@ -8,11 +8,7 @@
   border-right: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
-  position: fixed;
   height: 100dvh;
-  top: 0;
-  left: 0;
-  z-index: 50;
   transition: transform 0.25s ease;
 }
 
@@ -27,6 +23,24 @@
   align-items: center;
   gap: 10px;
   min-height: 60px;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: #f5f5f3;
+  color: #0f0f0f;
 }
 
 /* ── Nav ── */
@@ -149,15 +163,4 @@
   color: #ffffff;
 }
 
-/* ─── Mobile overlay ─────────────────────────────────────────────────────── */
 
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-    box-shadow: 4px 0 24px rgba(0,0,0,0.12);
-  }
-
-  .sidebarOpen {
-    transform: translateX(0);
-  }
-}

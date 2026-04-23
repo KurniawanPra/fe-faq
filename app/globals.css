@@ -52,11 +52,13 @@ body {
   margin-left: var(--sidebar-width);
   flex: 1;
   height: 100dvh;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   padding: 32px 40px;
   background: #fdfcfb;
+  scroll-behavior: smooth;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
@@ -86,5 +88,36 @@ body {
     margin-left: 0;
     padding: 20px 16px;
     padding-top: 72px; /* ruang untuk hamburger button */
+    height: 100dvh;
+    overflow-y: auto;
+  }
+
+  /* ── Dashboard page responsive grid overrides ── */
+  .dash-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .dash-charts-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dash-quicklinks {
+    flex-direction: column !important;
+  }
+
+  .dash-header-row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .dash-clock {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .dash-stats-grid {
+    grid-template-columns: 1fr !important;
   }
 }

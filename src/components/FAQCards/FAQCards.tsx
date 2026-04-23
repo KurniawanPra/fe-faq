@@ -144,14 +144,21 @@ export default function FAQCards({ searchQuery = "" }: { searchQuery?: string })
   }
 
   const filtered = searchQuery
-    ? topics.map(card => ({
-        ...card,
-        items: card.items.filter(
-          item =>
-            item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.a.toLowerCase().includes(searchQuery.toLowerCase())
-        ),
-      })).filter(c => c.items.length > 0)
+    ? topics.map(card => {
+        // Jika topic name persis sama atau mengandung query, tampilkan SEMUA itemnya
+        const topicMatch = card.topic.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        return {
+          ...card,
+          items: topicMatch 
+            ? card.items 
+            : card.items.filter(
+                item =>
+                  item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  item.a.toLowerCase().includes(searchQuery.toLowerCase())
+              ),
+        };
+      }).filter(c => c.items.length > 0)
     : topics;
 
   return (

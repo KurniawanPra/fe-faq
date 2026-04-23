@@ -61,7 +61,7 @@ const NAV_ITEMS = [
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ onClose }: { onClose?: () => void }) {
   const pathname    = usePathname();
   const router      = useRouter();
   const [user, setUser]             = useState<AdminUser | null>(null);
@@ -87,15 +87,29 @@ export default function DashboardSidebar() {
     <aside className={styles.sidebar}>
       {/* Brand */}
       <div className={styles.header}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-          <Image
-            src="/img/logo.png"
-            alt="Logo PT INL"
-            width={72}
-            height={32}
-            style={{ objectFit: 'contain' }}
-          />
-        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <Image
+              src="/img/logo.png"
+              alt="Logo PT INL"
+              width={72}
+              height={32}
+              style={{ objectFit: 'contain' }}
+            />
+          </Link>
+          
+          {onClose && (
+            <button 
+              onClick={onClose}
+              className={styles.closeBtn}
+              aria-label="Tutup menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Navigation */}

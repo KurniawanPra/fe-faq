@@ -191,7 +191,7 @@ export default function DashboardPage() {
       `}</style>
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+      <div className="dash-header-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, gap: 16 }}>
         <div>
           <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: "-0.3px" }}>Overview</h1>
           {now && (
@@ -200,7 +200,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Clock */}
-        <div style={{ ...card, padding: "12px 24px", textAlign: "center", background: "#0f0f0f", border: "none" }}>
+        <div className="dash-clock" style={{ ...card, padding: "12px 24px", textAlign: "center", background: "#0f0f0f", border: "none", flexShrink: 0 }}>
           <div style={{ fontSize: 28, fontWeight: 700, color: "#fff", fontVariantNumeric: "tabular-nums", letterSpacing: "0.05em" }}>
             {now ? formatTime(now) : "--:--:--"}
           </div>
@@ -211,7 +211,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
+      <div className="dash-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
         {loading
           ? [1,2,3,4].map(i => <StatSkeleton key={i} />)
           : STATS.map(s => (
@@ -229,7 +229,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Charts Row */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 300px", gap: 16, marginBottom: 24 }}>
+      <div className="dash-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 300px", gap: 16, marginBottom: 24 }}>
 
         {/* Bar: Inquiry per hari */}
         <div style={card}>
@@ -312,7 +312,7 @@ export default function DashboardPage() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
           <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Akses Cepat</h2>
         </div>
-        <div style={{ display: "flex", gap: 12 }}>
+        <div className="dash-quicklinks" style={{ display: "flex", gap: 12 }}>
           <Link href="/dashboard/questions" style={{
             flex: 1, padding: "16px 20px", borderRadius: 12,
             background: "#fafaf9", border: "1px solid #f0ede8",

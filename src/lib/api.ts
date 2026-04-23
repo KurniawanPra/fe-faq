@@ -172,6 +172,24 @@ export async function getTopics(): Promise<Topic[]> {
   return res.data ?? [];
 }
 
+/**
+ * Ambil topik populer berdasarkan jumlah pertanyaan terbanyak (publik).
+ * Digunakan untuk chip pencarian di SearchHeader landing page.
+ */
+export async function getPopularTopicNames(limit = 5): Promise<string[]> {
+  try {
+    // Gunakan endpoint /faqs yang tersedia publik — ambil topic names
+    const res = await request<{ success: boolean; data: { id: number; topic: string; items: unknown[] }[] }>("/faqs");
+    const sorted = (res.data ?? [])
+      .sort((a, b) => (b.items?.length ?? 0) - (a.items?.length ?? 0))
+      .slice(0, limit)
+      .map((t) => t.topic);
+    return sorted;
+  } catch {
+    return [];
+  }
+}
+
 export async function createTopic(nama: string): Promise<Topic> {
   const res = await request<{ success: boolean; data: Topic }>(
     "/topics",
