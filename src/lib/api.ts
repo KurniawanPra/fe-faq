@@ -298,3 +298,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   const res = await request<{ success: boolean; data: DashboardStats }>("/dashboard/stats", {}, true);
   return res.data;
 }
+
+export async function updatePassword(data: { current_password: string; new_password: string; new_password_confirmation: string }): Promise<void> {
+  await request("/update-password", { method: "PUT", body: JSON.stringify(data) }, true);
+}

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { logout, getUser, type AdminUser } from "@/lib/api";
+import { logout, getUser, updatePassword, type AdminUser } from "@/lib/api";
 import styles from "./DashboardSidebar.module.css";
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
@@ -67,6 +67,12 @@ export default function DashboardSidebar({ onClose }: { onClose?: () => void }) 
   const [user, setUser]             = useState<AdminUser | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [passwordData, setPasswordData] = useState({ current_password: "", new_password: "", new_password_confirmation: "" });
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
+
   useEffect(() => {
     setUser(getUser());
   }, []);
@@ -80,6 +86,27 @@ export default function DashboardSidebar({ onClose }: { onClose?: () => void }) 
     } finally {
       setLoggingOut(false);
       router.push("/login");
+    }
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError("");
+    setPasswordSuccess(false);
+    setPasswordLoading(true);
+
+    try {
+      await updatePassword(passwordData);
+      setPasswordSuccess(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setPasswordSuccess(false);
+        setPasswordData({ current_password: "", new_password: "", new_password_confirmation: "" });
+      }, 2000);
+    } catch (err: any) {
+      setPasswordError(err.message || "Gagal mengubah password.");
+    } finally {
+      setPasswordLoading(false);
     }
   };
 
@@ -132,13 +159,19 @@ export default function DashboardSidebar({ onClose }: { onClose?: () => void }) 
           <div className={styles.avatar}>
             {user?.name?.charAt(0).toUpperCase() ?? "A"}
           </div>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#0f0f0f" }}>
+          <div style={{ flex: 1, overflow: "hidden" }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#0f0f0f", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>
               {user?.name ?? "Admin"}
             </div>
-            <div style={{ fontSize: 11, color: "#aaa" }}>
+            <div style={{ fontSize: 11, color: "#aaa", marginBottom: 4, whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>
               {user?.email ?? "admin@inl.co.id"}
             </div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              style={{ fontSize: 11, color: "#0070f3", border: "none", background: "none", cursor: "pointer", padding: 0 }}
+            >
+              Ganti Password
+            </button>
           </div>
         </div>
         <button
@@ -151,6 +184,63 @@ export default function DashboardSidebar({ onClose }: { onClose?: () => void }) 
           {loggingOut ? "Keluar..." : "Keluar"}
         </button>
       </div>
+
+      {/* Modal Ganti Password */}
+      {isModalOpen && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)"
+        }}>
+          <div style={{ background: "#fff", padding: 24, borderRadius: 12, width: "90%", maxWidth: 400, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}>
+            <h2 style={{ margin: "0 0 16px 0", fontSize: 18 }}>Ganti Password</h2>
+            {passwordError && <div style={{ color: "red", fontSize: 13, marginBottom: 16 }}>{passwordError}</div>}
+            {passwordSuccess && <div style={{ color: "green", fontSize: 13, marginBottom: 16 }}>Password berhasil diubah!</div>}
+            <form onSubmit={handlePasswordSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 4 }}>Password Saat Ini</label>
+                <input
+                  type="password" required
+                  value={passwordData.current_password}
+                  onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
+                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, boxSizing: "border-box" }}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 4 }}>Password Baru</label>
+                <input
+                  type="password" required minLength={6}
+                  value={passwordData.new_password}
+                  onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
+                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, boxSizing: "border-box" }}
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 4 }}>Konfirmasi Password Baru</label>
+                <input
+                  type="password" required minLength={6}
+                  value={passwordData.new_password_confirmation}
+                  onChange={(e) => setPasswordData({ ...passwordData, new_password_confirmation: e.target.value })}
+                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, boxSizing: "border-box" }}
+                />
+              </div>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8 }}>
+                <button
+                  type="button" onClick={() => setIsModalOpen(false)}
+                  style={{ padding: "8px 16px", background: "none", border: "1px solid #ddd", borderRadius: 6, cursor: "pointer" }}
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit" disabled={passwordLoading}
+                  style={{ padding: "8px 16px", background: "#0f0f0f", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer" }}
+                >
+                  {passwordLoading ? "Menyimpan..." : "Simpan"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
