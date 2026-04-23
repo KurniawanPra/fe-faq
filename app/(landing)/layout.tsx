@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { Navbar, SearchHeader } from "@/components";
+import { Navbar, SearchHeader, Footer } from "@/components";
 
 export default function LandingLayout({
   children,
@@ -13,6 +13,7 @@ export default function LandingLayout({
         <SearchHeader />
       </Suspense>
       {children}
+      <Footer />
     </>
   );
 }
