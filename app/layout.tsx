@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "PT. Industri Nabati Lestari FAQ",
   description: "Pusat bantuan dan informasi PT. Industri Nabati Lestari",
+  icons: {
+    icon: "/img/logo.png",
+  },
 };
 
 export default function RootLayout({
