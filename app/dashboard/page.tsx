@@ -299,31 +299,30 @@ export default function DashboardPage() {
         }
       </div>
 
-      {/* Charts Row */}
-      <div className="dash-charts-grid" style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1.2fr", gap: 20, marginBottom: 32 }}>
-
-        {/* Bar: Inquiry per hari */}
-        <div style={{ ...card, minHeight: 320, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-            <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#1f2937' }}>Statistik Inquiry</h2>
-            <div style={{ fontSize: 12, color: '#6b7280', fontWeight: 500, background: '#f3f4f6', padding: '4px 10px', borderRadius: 20 }}>
-              7 Hari Terakhir
-            </div>
-          </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end' }}>
-            {perHari.length > 0
-              ? <BarChart data={perHari} labelKey="hari" />
-              : <div style={{ height: 160, width: '100%', display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "#9ca3af", fontSize: 14, border: '2px dashed #f3f4f6', borderRadius: 12 }}>
-                  Belum ada data inquiry
-                </div>
-            }
+      {/* Main Chart: Statistik Inquiry (Full Width Row) */}
+      <div style={{ ...card, minHeight: 320, display: 'flex', flexDirection: 'column', marginBottom: 20, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: '#1f2937' }}>Statistik Inquiry Harian</h2>
+          <div style={{ fontSize: 12, color: '#4f46e5', fontWeight: 700, background: '#e0e7ff', padding: '6px 14px', borderRadius: 20, letterSpacing: '0.02em' }}>
+            7 HARI TERAKHIR
           </div>
         </div>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', minHeight: 220 }}>
+          {perHari.length > 0
+            ? <BarChart data={perHari} labelKey="hari" />
+            : <div style={{ height: 200, width: '100%', display: "flex", alignItems: "center", justifyContent: "center",
+                color: "#9ca3af", fontSize: 14, border: '2px dashed #f3f4f6', borderRadius: 12 }}>
+                Belum ada data statistik tersedia
+              </div>
+          }
+        </div>
+      </div>
 
+      {/* Secondary Charts: Topik & Resolusi (Two Columns Row) */}
+      <div className="dash-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 32 }}>
         {/* Horizontal: per topik */}
-        <div style={{ ...card, display: 'flex', flexDirection: 'column' }}>
-          <h2 style={{ margin: "0 0 20px", fontSize: 16, fontWeight: 700, color: '#1f2937' }}>Topik Populer</h2>
+        <div style={{ ...card, display: 'flex', flexDirection: 'column', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+          <h2 style={{ margin: "0 0 20px", fontSize: 16, fontWeight: 700, color: '#1f2937' }}>Topik Paling Sering Ditanyakan</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 16, flex: 1, justifyContent: 'center' }}>
             {perTopik.map((t, i) => (
               <div key={t.topik}>
@@ -331,12 +330,12 @@ export default function DashboardPage() {
                   <span style={{ color: "#374151", fontWeight: 600 }}>{t.topik}</span>
                   <span style={{ fontWeight: 800, color: TOPIC_COLORS[i % TOPIC_COLORS.length] }}>{t.count}</span>
                 </div>
-                <div style={{ height: 8, background: "#f3f4f6", borderRadius: 999 }}>
+                <div style={{ height: 10, background: "#f3f4f6", borderRadius: 999 }}>
                   <div style={{
                     height: "100%", width: `${(t.count / maxTopik) * 100}%`,
                     background: TOPIC_COLORS[i % TOPIC_COLORS.length],
                     borderRadius: 999, transition: "width 1s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                    boxShadow: `0 0 10px ${TOPIC_COLORS[i % TOPIC_COLORS.length]}44`
+                    boxShadow: `0 0 12px ${TOPIC_COLORS[i % TOPIC_COLORS.length]}33`
                   }} />
                 </div>
               </div>
@@ -348,9 +347,9 @@ export default function DashboardPage() {
         </div>
 
         {/* Donut: status inquiry */}
-        <div style={{ ...card, display: "flex", flexDirection: "column" }}>
-          <h2 style={{ margin: "0 0 24px", fontSize: 16, fontWeight: 700, color: '#1f2937' }}>Resolusi Inquiry</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: 24, flex: 1, justifyContent: 'center' }}>
+        <div style={{ ...card, display: "flex", flexDirection: "column", border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
+          <h2 style={{ margin: "0 0 24px", fontSize: 16, fontWeight: 700, color: '#1f2937' }}>Rasio Penyelesaian Inquiry</h2>
+          <div style={{ display: "flex", alignItems: "center", gap: 32, flex: 1, justifyContent: 'center' }}>
             <DonutChart
               resolved={stats?.inquiry_resolved ?? 0}
               pending={stats?.inquiry_pending ?? 0}
@@ -361,7 +360,7 @@ export default function DashboardPage() {
                   <span style={{ width: 10, height: 10, borderRadius: 50, background: "#10b981", flexShrink: 0 }} />
                   <span style={{ fontSize: 13, color: "#6b7280", fontWeight: 600 }}>Selesai</span>
                 </div>
-                <span style={{ fontSize: 26, fontWeight: 800, color: "#10b981", paddingLeft: 20 }}>
+                <span style={{ fontSize: 28, fontWeight: 800, color: "#10b981", paddingLeft: 20 }}>
                   {stats?.inquiry_resolved ?? 0}
                 </span>
               </div>
@@ -370,14 +369,14 @@ export default function DashboardPage() {
                   <span style={{ width: 10, height: 10, borderRadius: 50, background: "#f59e0b", flexShrink: 0 }} />
                   <span style={{ fontSize: 13, color: "#6b7280", fontWeight: 600 }}>Pending</span>
                 </div>
-                <span style={{ fontSize: 26, fontWeight: 800, color: "#f59e0b", paddingLeft: 20 }}>
+                <span style={{ fontSize: 28, fontWeight: 800, color: "#f59e0b", paddingLeft: 20 }}>
                   {stats?.inquiry_pending ?? 0}
                 </span>
               </div>
             </div>
           </div>
           <div style={{ marginTop: 24 }}>
-            <div style={{ height: 10, background: "#f3f4f6", borderRadius: 999, overflow: "hidden" }}>
+            <div style={{ height: 12, background: "#f3f4f6", borderRadius: 999, overflow: "hidden" }}>
               <div style={{
                 height: "100%",
                 width: `${((stats?.inquiry_resolved ?? 0) / ((stats?.inquiry_resolved ?? 0) + (stats?.inquiry_pending ?? 0) || 1)) * 100}%`,
@@ -385,8 +384,8 @@ export default function DashboardPage() {
                 transition: 'width 1s ease'
               }} />
             </div>
-            <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 12, color: "#10b981", marginTop: 8, fontWeight: 700 }}>
-              {Math.round(((stats?.inquiry_resolved ?? 0) / ((stats?.inquiry_resolved ?? 0) + (stats?.inquiry_pending ?? 0) || 1)) * 100)}% Rasio Selesai
+            <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 13, color: "#10b981", marginTop: 8, fontWeight: 800 }}>
+              {Math.round(((stats?.inquiry_resolved ?? 0) / ((stats?.inquiry_resolved ?? 0) + (stats?.inquiry_pending ?? 0) || 1)) * 100)}% KASUS SELESAI
             </div>
           </div>
         </div>
