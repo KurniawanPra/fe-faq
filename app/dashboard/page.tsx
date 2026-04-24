@@ -154,9 +154,13 @@ function StatSkeleton() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
+  const currentDate = new Date();
+  const currentMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+  
   const [now,   setNow]   = useState<Date | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [monthFilter, setMonthFilter] = useState<string>(""); // Default empty (triggers 7-day filter)
 
   useEffect(() => {
     setNow(new Date());
@@ -165,15 +169,15 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    getDashboardStats()
+    setLoading(true);
+    getDashboardStats(monthFilter)
       .then(setStats)
       .catch(() => setStats(null))
       .finally(() => setLoading(false));
-  }, []);
+  }, [monthFilter]);
 
   const STATS = stats ? [
     { label: "Total Pertanyaan FAQ",  value: stats.total_pertanyaan,          color: "#6366f1" },
-    { label: "Belum Dijawab",         value: stats.pertanyaan_belum_dijawab,  color: "#f59e0b" },
     { label: "Topik Aktif",           value: stats.topik_aktif,               color: "#10b981" },
     { label: "Inquiry Menunggu",      value: stats.inquiry_pending,           color: "#ef4444" },
   ] : [];
@@ -192,11 +196,26 @@ export default function DashboardPage() {
 
       {/* Header */}
       <div className="dash-header-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32, gap: 16 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: "-0.3px" }}>Overview</h1>
-          {now && (
-            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#888" }}>{formatDate(now)}</p>
-          )}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <div>
+            <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, letterSpacing: "-0.3px" }}>Overview</h1>
+            {now && (
+              <p style={{ margin: "4px 0 0", fontSize: 13, color: "#888" }}>{formatDate(now)}</p>
+            )}
+          </div>
+          <div style={{ marginLeft: 16, paddingLeft: 16, borderLeft: "1px solid #f0ede8" }}>
+            <div style={{ fontSize: 11, color: "#888", marginBottom: 4, fontWeight: 600 }}>FILTER PERIODE</div>
+            <input
+              type="month"
+              value={monthFilter}
+              onChange={e => setMonthFilter(e.target.value)}
+              style={{
+                height: 36, padding: "0 12px", border: "1.5px solid #e8e5e0",
+                borderRadius: 8, fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+                background: "#fff", outline: "none", cursor: "pointer", color: "#0f0f0f"
+              }}
+            />
+          </div>
         </div>
 
         {/* Clock */}
@@ -211,9 +230,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat Cards */}
-      <div className="dash-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
+      <div className="dash-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 24 }}>
         {loading
-          ? [1,2,3,4].map(i => <StatSkeleton key={i} />)
+          ? [1,2,3].map(i => <StatSkeleton key={i} />)
           : STATS.map(s => (
             <div key={s.label} style={{ ...card, borderTop: `3px solid ${s.color}` }}>
               <div style={{ fontSize: 11, fontWeight: 600, color: "#888", textTransform: "uppercase",

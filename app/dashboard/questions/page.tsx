@@ -47,9 +47,9 @@ function QuestionModal({
   saving: boolean;
 }) {
   const [form, setForm] = useState<FormState>({
-    topik_id:     initial.topik_id     ?? topics[0]?.id ?? 0,
-    pertanyaan:   initial.pertanyaan   ?? "",
-    jawaban_admin:initial.jawaban_admin ?? "",
+    topik_id: initial.topik_id ?? topics[0]?.id ?? 0,
+    pertanyaan: initial.pertanyaan ?? "",
+    jawaban_admin: initial.jawaban_admin ?? "",
   });
 
   const set = (key: keyof FormState, val: string | number) =>
@@ -65,7 +65,7 @@ function QuestionModal({
   );
 
   return (
-    <div 
+    <div
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)",
@@ -73,13 +73,13 @@ function QuestionModal({
         display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
       }}
     >
-      <div 
+      <div
         onClick={e => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: 16, width: "100%", maxWidth: 560,
-        maxHeight: "90vh", overflowY: "auto",
-        boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
-      }}>
+          maxHeight: "90vh", overflowY: "auto",
+          boxShadow: "0 24px 64px rgba(0,0,0,0.18)",
+        }}>
         <div style={{
           padding: "24px 28px 20px", borderBottom: "1px solid #f0ede8",
           display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -160,7 +160,7 @@ function DeleteDialog({
   question: Question; onConfirm: () => void; onClose: () => void; deleting: boolean;
 }) {
   return (
-    <div 
+    <div
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)",
@@ -168,20 +168,21 @@ function DeleteDialog({
         display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
       }}
     >
-      <div 
+      <div
         onClick={e => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: 16, width: "100%", maxWidth: 400,
           padding: 32, boxShadow: "0 24px 64px rgba(0,0,0,0.2)", textAlign: "center",
         }}
       >
-        <div style={{ width: 48, height: 48, background: "#fef2f2", borderRadius: 12,
+        <div style={{
+          width: 48, height: 48, background: "#fef2f2", borderRadius: 12,
           display: "flex", alignItems: "center", justifyContent: "center",
           margin: "0 auto 16px",
         }}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <path d="M4 6h12M8 6V4h4v2M6 6l1 10h6l1-10"
-              stroke="#ef4444" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              stroke="#ef4444" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
         <h3 style={{ margin: "0 0 8px", fontSize: 17, fontWeight: 700 }}>Hapus Pertanyaan?</h3>
@@ -208,20 +209,20 @@ function DeleteDialog({
 export default function QuestionsAdmin() {
   // Data state
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [topics,    setTopics]    = useState<Topic[]>([]);
-  const [loading,   setLoading]   = useState(true);
-  
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const [loading, setLoading] = useState(true);
+
   // Modal states
-  const [modal,     setModal]     = useState<{ mode: "add" | "edit"; data?: Question } | null>(null);
-  const [toDelete,  setToDelete]  = useState<Question | null>(null);
-  const [saving,    setSaving]    = useState(false);
-  const [deleting,  setDeleting]  = useState(false);
-  const [toast,     setToast]     = useState("");
+  const [modal, setModal] = useState<{ mode: "add" | "edit"; data?: Question } | null>(null);
+  const [toDelete, setToDelete] = useState<Question | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [toast, setToast] = useState("");
 
   // Filters
-  const [search,      setSearch]  = useState("");
-  const [topikFilter, setTopik]   = useState<string>("all");
-  const [sortDir,     setSortDir] = useState<"asc" | "desc">("desc");
+  const [search, setSearch] = useState("");
+  const [topikFilter, setTopik] = useState<string>("all");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -261,9 +262,9 @@ export default function QuestionsAdmin() {
   const filteredQuestions = questions.filter(q => {
     if (!search) return true;
     const s = search.toLowerCase();
-    return q.pertanyaan.toLowerCase().includes(s) || 
-           (q.jawaban_admin?.toLowerCase() ?? "").includes(s) ||
-           (q.topik_nama?.toLowerCase() ?? "").includes(s);
+    return q.pertanyaan.toLowerCase().includes(s) ||
+      (q.jawaban_admin?.toLowerCase() ?? "").includes(s) ||
+      (q.topik_nama?.toLowerCase() ?? "").includes(s);
   });
 
   // ── Pagination Logic ───────────────────────────────────────────────────────
@@ -280,16 +281,16 @@ export default function QuestionsAdmin() {
       const user = getUser();
       if (modal?.mode === "add") {
         await createQuestion({
-          topik_id:     form.topik_id,
-          user_id:      user?.id ?? 1,
-          pertanyaan:   form.pertanyaan,
+          topik_id: form.topik_id,
+          user_id: user?.id ?? 1,
+          pertanyaan: form.pertanyaan,
           jawaban_admin: form.jawaban_admin || undefined,
         });
         showToast("Pertanyaan berhasil ditambahkan.");
       } else if (modal?.data) {
         await updateQuestion(modal.data.id, {
-          topik_id:     form.topik_id,
-          pertanyaan:   form.pertanyaan,
+          topik_id: form.topik_id,
+          pertanyaan: form.pertanyaan,
           jawaban_admin: form.jawaban_admin,
         });
         showToast("Pertanyaan berhasil diperbarui.");
@@ -385,8 +386,8 @@ export default function QuestionsAdmin() {
           onChange={e => setSortDir(e.target.value as "asc" | "desc")}
           style={{ ...inputStyle, width: 170, height: 38, cursor: "pointer" }}
         >
-          <option value="desc">Terbaru Dibuat</option>
-          <option value="asc">Terlama Dibuat</option>
+          <option value="desc">Terbaru</option>
+          <option value="asc">Terlama</option>
         </select>
 
         {(search || topikFilter !== "all") && (
@@ -400,8 +401,8 @@ export default function QuestionsAdmin() {
       </div>
 
       {/* Table Section */}
-      <div style={{ 
-        background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", 
+      <div style={{
+        background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)",
         overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
         display: "flex", flexDirection: "column", flex: 1, minHeight: 0
       }}>
@@ -410,11 +411,11 @@ export default function QuestionsAdmin() {
             <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
               <tr style={{ background: "#fafaf9", borderBottom: "1px solid #f0ede8" }}>
                 {[
-                  { label: "No.",       w: 60 },
-                  { label: "Topik",     w: 150 },
+                  { label: "No.", w: 60 },
+                  { label: "Topik", w: 150 },
                   { label: "Pertanyaan" },
                   { label: "Jawaban" },
-                  { label: "Aksi",      w: 130 },
+                  { label: "Aksi", w: 130 },
                 ].map(col => (
                   <th key={col.label} style={{
                     padding: "16px", textAlign: "left", fontSize: 11,
@@ -431,7 +432,7 @@ export default function QuestionsAdmin() {
               {loading ? (
                 [...Array(5)].map((_, i) => (
                   <tr key={i} style={{ borderBottom: "1px solid #f9f8f6" }}>
-                    {[1,2,3,4,5].map(j => (
+                    {[1, 2, 3, 4, 5].map(j => (
                       <td key={j} style={{ padding: "20px 16px" }}>
                         <div style={{ height: 14, background: "#f0ede8", borderRadius: 4, animation: "pulse 1.5s infinite" }} />
                       </td>
@@ -508,7 +509,7 @@ export default function QuestionsAdmin() {
             <button
               disabled={page === 1}
               onClick={() => setPage(p => p - 1)}
-              style={btn("#666", "#fff", { 
+              style={btn("#666", "#fff", {
                 padding: "6px 12px", border: "1px solid #e0ddd7",
                 opacity: page === 1 ? 0.4 : 1, cursor: page === 1 ? "default" : "pointer"
               })}
@@ -519,7 +520,7 @@ export default function QuestionsAdmin() {
             <button
               disabled={page >= totalPages}
               onClick={() => setPage(p => p + 1)}
-              style={btn("#666", "#fff", { 
+              style={btn("#666", "#fff", {
                 padding: "6px 12px", border: "1px solid #e0ddd7",
                 opacity: page >= totalPages ? 0.4 : 1, cursor: page >= totalPages ? "default" : "pointer"
               })}

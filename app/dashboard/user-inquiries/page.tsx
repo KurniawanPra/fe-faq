@@ -260,10 +260,14 @@ export default function UserInquiriesAdmin() {
   const [toast,        setToast]        = useState("");
 
   // Filters
+  const currentDate = new Date();
+  const currentMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+  
   const [search,       setSearch]       = useState("");
   const [statusFilter, setStatus]       = useState<"all" | "pending" | "resolved">("all");
   const [viaFilter,    setVia]          = useState<"all" | "email" | "whatsapp" | "telepon">("all");
   const [sortDir,      setSortDir]      = useState<"desc" | "asc">("desc");
+  const [monthFilter,  setMonthFilter]  = useState<string>("");
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -286,6 +290,10 @@ export default function UserInquiriesAdmin() {
       if (statusFilter === "pending")  params.status = false;
       if (statusFilter === "resolved") params.status = true;
 
+      if (statusFilter !== "pending" && monthFilter) {
+        params.month = monthFilter;
+      }
+
       const res = await getInquiries(params);
       setInquiries(res.data);
       setPage(1); // Reset page on filter change
@@ -294,7 +302,7 @@ export default function UserInquiriesAdmin() {
     } finally {
       setLoading(false);
     }
-  }, [statusFilter, viaFilter, sortDir]);
+  }, [statusFilter, viaFilter, sortDir, monthFilter]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
@@ -458,9 +466,18 @@ export default function UserInquiriesAdmin() {
           <option value="asc">Terlama Pertama</option>
         </select>
 
-        {(search || statusFilter !== "all" || viaFilter !== "all") && (
+        {statusFilter !== "pending" && (
+          <input
+            type="month"
+            value={monthFilter}
+            onChange={e => setMonthFilter(e.target.value)}
+            style={{ ...inputStyle, width: 150, height: 38, cursor: "pointer", color: "#0f0f0f" }}
+          />
+        )}
+
+        {(search || statusFilter !== "all" || viaFilter !== "all" || monthFilter !== "") && (
           <button
-            onClick={() => { setSearch(""); setStatus("all"); setVia("all"); }}
+            onClick={() => { setSearch(""); setStatus("all"); setVia("all"); setMonthFilter(""); }}
             style={{ ...btn("#666", "#f0ede8", { height: 38, padding: "0 14px" }) }}
           >
             Reset

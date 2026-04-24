@@ -147,6 +147,7 @@ export interface GetInquiriesParams {
   search?: string;
   direction?: "asc" | "desc";
   per_page?: number;
+  month?: string;
 }
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
@@ -294,8 +295,9 @@ export async function deleteInquiry(id: number): Promise<void> {
   await request(`/user-inquiries/${id}`, { method: "DELETE" }, true);
 }
 
-export async function getDashboardStats(): Promise<DashboardStats> {
-  const res = await request<{ success: boolean; data: DashboardStats }>("/dashboard/stats", {}, true);
+export async function getDashboardStats(month?: string): Promise<DashboardStats> {
+  const qs = month ? `?month=${month}` : "";
+  const res = await request<{ success: boolean; data: DashboardStats }>(`/dashboard/stats${qs}`, {}, true);
   return res.data;
 }
 

@@ -9,6 +9,7 @@ import { login, saveToken, saveUser } from "@/lib/api";
 export default function LoginPage() {
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error,    setError]    = useState("");
   const [loading,  setLoading]  = useState(false);
   const router = useRouter();
@@ -124,6 +125,34 @@ export default function LoginPage() {
           background: #fff;
         }
 
+        .password-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .password-wrapper .input-field {
+          padding-right: 40px;
+        }
+
+        .toggle-password {
+          position: absolute;
+          right: 12px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #888;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          height: 100%;
+        }
+
+        .toggle-password:hover {
+          color: #333;
+        }
+
         .error-box {
           background: #fef2f2;
           border: 1px solid #fecaca;
@@ -231,14 +260,34 @@ export default function LoginPage() {
 
           <div className="input-group">
             <label className="input-label">Password</label>
-            <input
-              type="password"
-              className="input-field"
-              placeholder="Masukkan password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="input-field"
+                placeholder="Masukkan password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+                title={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+              >
+                {showPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
 
           <button className="login-btn" type="submit" disabled={loading}>
