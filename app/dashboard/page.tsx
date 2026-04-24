@@ -63,11 +63,19 @@ function BarChart({ data, labelKey }: { data: any[]; labelKey: string }) {
   const max = Math.max(...data.map(d => d.count), 5);
   const H   = 100;
   const barW = 20;
-  const gap = 80; // Increased gap for longer labels
+  const gap = 56; 
+
+  const formatLabel = (val: string) => {
+    if (labelKey === "hari") {
+      const d = new Date(val);
+      return d.toLocaleDateString("id-ID", { weekday: "short" });
+    }
+    return val;
+  };
 
   return (
     <div style={{ padding: "10px 0", overflowX: "auto" }}>
-      <svg width="100%" height={H + 50} viewBox={`0 0 ${Math.max(data.length * gap, 400)} ${H + 50}`} style={{ overflow: "visible", maxWidth: "100%" }}>
+      <svg width="100%" height={H + 40} viewBox={`0 0 ${Math.max(data.length * gap, 400)} ${H + 40}`} style={{ overflow: "visible", maxWidth: "100%" }}>
         <defs>
           <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#6366f1" />
@@ -84,13 +92,11 @@ function BarChart({ data, labelKey }: { data: any[]; labelKey: string }) {
           
           return (
             <g key={d[labelKey]} className="bar-group" style={{ cursor: 'pointer' }}>
-              {/* Background track */}
               <rect 
                 x={x} y={0} width={barW} height={H} 
                 rx={barW/2} fill="#f8f7f4" 
               />
               
-              {/* Active Bar */}
               <rect 
                 x={x} y={H - bH} width={barW} height={bH} 
                 rx={barW/2} fill="url(#barGradient)"
@@ -99,13 +105,12 @@ function BarChart({ data, labelKey }: { data: any[]; labelKey: string }) {
                 <title>{`${d.count} Inquiry`}</title>
               </rect>
 
-              {/* Label */}
               <text 
-                x={x + barW/2} y={H + 25} 
-                textAnchor="middle" fontSize={10} fontWeight={600}
+                x={x + barW/2} y={H + 22} 
+                textAnchor="middle" fontSize={11} fontWeight={600}
                 fill="#888" fontFamily="Inter, sans-serif"
               >
-                {d[labelKey]}
+                {formatLabel(d[labelKey])}
               </text>
 
               {/* Value on top */}
@@ -179,7 +184,7 @@ export default function DashboardPage() {
 
   const perTopik  = stats?.pertanyaan_per_topik ?? [];
   const maxTopik  = Math.max(...perTopik.map(t => t.count), 1);
-  const perMinggu = stats?.inquiry_per_minggu   ?? [];
+  const perHari   = stats?.inquiry_per_hari      ?? [];
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", maxWidth: 1100 }}>
@@ -245,11 +250,11 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="dash-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 300px", gap: 16, marginBottom: 24 }}>
 
-        {/* Bar: Inquiry per minggu */}
+        {/* Bar: Inquiry per hari */}
         <div style={card}>
-          <h2 style={{ margin: "0 0 20px", fontSize: 15, fontWeight: 600 }}>Inquiry per Minggu</h2>
-          {perMinggu.length > 0
-            ? <BarChart data={perMinggu} labelKey="minggu" />
+          <h2 style={{ margin: "0 0 20px", fontSize: 15, fontWeight: 600 }}>Inquiry per Hari</h2>
+          {perHari.length > 0
+            ? <BarChart data={perHari} labelKey="hari" />
             : <div style={{ height: 80, display: "flex", alignItems: "center", justifyContent: "center",
                 color: "#ccc", fontSize: 13 }}>Belum ada data</div>
           }
