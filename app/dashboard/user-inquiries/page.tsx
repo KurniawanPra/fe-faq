@@ -37,15 +37,15 @@ function formatDate(str: string) {
 
 // label yang jelas untuk channel balasan
 const VIA_LABEL: Record<string, string> = {
-  email:    "Email",
+  email: "Email",
   whatsapp: "WhatsApp",
-  telepon:  "Telepon",
+  telepon: "Telepon",
 };
 
 const VIA_COLOR: Record<string, { bg: string; color: string }> = {
-  email:    { bg: "#eef2ff", color: "#4f46e5" },
+  email: { bg: "#eef2ff", color: "#4f46e5" },
   whatsapp: { bg: "#f0fdf4", color: "#16a34a" },
-  telepon:  { bg: "#fff7ed", color: "#c2410c" },
+  telepon: { bg: "#fff7ed", color: "#c2410c" },
 };
 
 // ─── Detail Modal ─────────────────────────────────────────────────────────────
@@ -62,7 +62,7 @@ function DetailModal({
   const via = VIA_COLOR[inquiry.jawaban_melalui] ?? VIA_COLOR.email;
 
   return (
-    <div 
+    <div
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)",
@@ -70,7 +70,7 @@ function DetailModal({
         display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
       }}
     >
-      <div 
+      <div
         onClick={e => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: 16, width: "100%", maxWidth: 560,
@@ -123,16 +123,18 @@ function DetailModal({
             background: "#fafaf9", borderRadius: 12, padding: "16px 18px",
             border: "1px solid #f0ede8",
           }}>
-            <h3 style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 700, color: "#888",
-              textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            <h3 style={{
+              margin: "0 0 12px", fontSize: 12, fontWeight: 700, color: "#888",
+              textTransform: "uppercase", letterSpacing: "0.06em"
+            }}>
               Informasi Pengirim
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 16px" }}>
               {[
-                { label: "Nama",    val: inquiry.nama_user },
+                { label: "Nama", val: inquiry.nama_user },
                 { label: "Jabatan", val: inquiry.jabatan },
-                { label: "Email",   val: inquiry.email },
-                { label: "Bagian",  val: inquiry.bagian },
+                { label: "Email", val: inquiry.email },
+                { label: "Bagian", val: inquiry.bagian },
               ].map(row => (
                 <div key={row.label}>
                   <div style={{ fontSize: 11, color: "#aaa", marginBottom: 2 }}>{row.label}</div>
@@ -140,7 +142,7 @@ function DetailModal({
                 </div>
               ))}
             </div>
-            
+
             <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px dashed #e8e5e0" }}>
               <div style={{ fontSize: 11, color: "#aaa", marginBottom: 6 }}>Hubungi Kembali Melalui:</div>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -162,8 +164,10 @@ function DetailModal({
 
           {/* Pertanyaan */}
           <div>
-            <div style={{ fontSize: 11, color: "#aaa", textTransform: "uppercase",
-              letterSpacing: "0.06em", fontWeight: 700, marginBottom: 8 }}>
+            <div style={{
+              fontSize: 11, color: "#aaa", textTransform: "uppercase",
+              letterSpacing: "0.06em", fontWeight: 700, marginBottom: 8
+            }}>
               Pertanyaan
             </div>
             <div style={{
@@ -177,8 +181,10 @@ function DetailModal({
 
           {/* Catatan admin */}
           <div>
-            <div style={{ fontSize: 11, color: "#aaa", textTransform: "uppercase",
-              letterSpacing: "0.06em", fontWeight: 700, marginBottom: 8 }}>
+            <div style={{
+              fontSize: 11, color: "#aaa", textTransform: "uppercase",
+              letterSpacing: "0.06em", fontWeight: 700, marginBottom: 8
+            }}>
               Catatan Internal
             </div>
             <textarea
@@ -210,7 +216,7 @@ function DeleteDialog({
   name: string; onConfirm: () => void; onClose: () => void; deleting: boolean;
 }) {
   return (
-    <div 
+    <div
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)",
@@ -218,19 +224,20 @@ function DeleteDialog({
         display: "flex", alignItems: "center", justifyContent: "center", padding: 24,
       }}
     >
-      <div 
+      <div
         onClick={e => e.stopPropagation()}
         style={{
           background: "#fff", borderRadius: 16, width: "100%", maxWidth: 380,
           padding: 32, boxShadow: "0 24px 64px rgba(0,0,0,0.2)", textAlign: "center",
         }}
       >
-        <div style={{ width: 48, height: 48, background: "#fef2f2", borderRadius: 12,
+        <div style={{
+          width: 48, height: 48, background: "#fef2f2", borderRadius: 12,
           display: "flex", alignItems: "center", justifyContent: "center",
           margin: "0 auto 16px",
         }}>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M4 6h12M8 6V4h4v2M6 6l1 10h6l1-10" stroke="#ef4444" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M4 6h12M8 6V4h4v2M6 6l1 10h6l1-10" stroke="#ef4444" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
         <h3 style={{ margin: "0 0 8px", fontSize: 17, fontWeight: 700 }}>Hapus Pertanyaan?</h3>
@@ -251,23 +258,23 @@ function DeleteDialog({
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function UserInquiriesAdmin() {
-  const [inquiries,    setInquiries]    = useState<UserInquiry[]>([]);
-  const [loading,      setLoading]      = useState(true);
-  const [detail,       setDetail]       = useState<UserInquiry | null>(null);
-  const [toDelete,     setToDelete]     = useState<UserInquiry | null>(null);
-  const [saving,       setSaving]       = useState(false);
-  const [deleting,     setDeleting]     = useState(false);
-  const [toast,        setToast]        = useState("");
+  const [inquiries, setInquiries] = useState<UserInquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [detail, setDetail] = useState<UserInquiry | null>(null);
+  const [toDelete, setToDelete] = useState<UserInquiry | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [toast, setToast] = useState("");
 
   // Filters
   const currentDate = new Date();
   const currentMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-  
-  const [search,       setSearch]       = useState("");
-  const [statusFilter, setStatus]       = useState<"all" | "pending" | "resolved">("all");
-  const [viaFilter,    setVia]          = useState<"all" | "email" | "whatsapp" | "telepon">("all");
-  const [sortDir,      setSortDir]      = useState<"desc" | "asc">("desc");
-  const [monthFilter,  setMonthFilter]  = useState<string>("");
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatus] = useState<"all" | "pending" | "resolved">("all");
+  const [viaFilter, setVia] = useState<"all" | "email" | "whatsapp" | "telepon">("all");
+  const [sortDir, setSortDir] = useState<"desc" | "asc">("desc");
+  const [monthFilter, setMonthFilter] = useState<string>("");
 
   // Pagination
   const [page, setPage] = useState(1);
@@ -287,7 +294,7 @@ export default function UserInquiriesAdmin() {
         direction: sortDir,
         per_page: 500,
       };
-      if (statusFilter === "pending")  params.status = false;
+      if (statusFilter === "pending") params.status = false;
       if (statusFilter === "resolved") params.status = true;
 
       if (statusFilter !== "pending" && monthFilter) {
@@ -311,10 +318,10 @@ export default function UserInquiriesAdmin() {
     if (!search) return true;
     const s = search.toLowerCase();
     return (i.nama_user?.toLowerCase() ?? "").includes(s) ||
-           (i.email?.toLowerCase() ?? "").includes(s) ||
-           (i.pertanyaan?.toLowerCase() ?? "").includes(s) ||
-           (i.jabatan?.toLowerCase() ?? "").includes(s) ||
-           (i.bagian?.toLowerCase() ?? "").includes(s);
+      (i.email?.toLowerCase() ?? "").includes(s) ||
+      (i.pertanyaan?.toLowerCase() ?? "").includes(s) ||
+      (i.jabatan?.toLowerCase() ?? "").includes(s) ||
+      (i.bagian?.toLowerCase() ?? "").includes(s);
   });
 
   // ── Pagination Logic ───────────────────────────────────────────────────────
@@ -359,8 +366,8 @@ export default function UserInquiriesAdmin() {
   };
 
   // ── Stats ──────────────────────────────────────────────────────────────────
-  const totalPending  = inquiries.filter(i => !i.status).length;
-  const totalResolved = inquiries.filter(i =>  i.status).length;
+  const totalPending = inquiries.filter(i => !i.status).length;
+  const totalResolved = inquiries.filter(i => i.status).length;
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
@@ -395,20 +402,24 @@ export default function UserInquiriesAdmin() {
       {/* Summary Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, marginBottom: 20 }}>
         {[
-          { label: "Total Masuk",  value: loading ? "-" : inquiries.length,  color: "#6366f1" },
-          { label: "Menunggu",     value: loading ? "-" : totalPending,       color: "#b45309" },
-          { label: "Selesai",      value: loading ? "-" : totalResolved,      color: "#16a34a" },
-          { label: "Hari Ini",     value: loading ? "-" : inquiries.filter(i => {
+          { label: "Total Masuk", value: loading ? "-" : inquiries.length, color: "#6366f1" },
+          { label: "Menunggu", value: loading ? "-" : totalPending, color: "#b45309" },
+          { label: "Selesai", value: loading ? "-" : totalResolved, color: "#16a34a" },
+          {
+            label: "Hari Ini", value: loading ? "-" : inquiries.filter(i => {
               const d = new Date(i.created_at);
               return d.toDateString() === new Date().toDateString();
-            }).length, color: "#0ea5e9" },
+            }).length, color: "#0ea5e9"
+          },
         ].map(s => (
           <div key={s.label} style={{
             background: "#fff", borderRadius: 14, border: "1px solid rgba(0,0,0,0.06)",
             padding: "16px 20px", borderLeft: `4px solid ${s.color}`,
           }}>
-            <div style={{ fontSize: 11, color: "#888", fontWeight: 600, textTransform: "uppercase",
-              letterSpacing: "0.06em", marginBottom: 6 }}>{s.label}</div>
+            <div style={{
+              fontSize: 11, color: "#888", fontWeight: 600, textTransform: "uppercase",
+              letterSpacing: "0.06em", marginBottom: 6
+            }}>{s.label}</div>
             <div style={{ fontSize: 28, fontWeight: 700, color: s.color }}>{s.value}</div>
           </div>
         ))}
@@ -462,8 +473,8 @@ export default function UserInquiriesAdmin() {
           onChange={e => setSortDir(e.target.value as "asc" | "desc")}
           style={{ ...inputStyle, width: 170, height: 38, cursor: "pointer" }}
         >
-          <option value="desc">Terbaru Pertama</option>
-          <option value="asc">Terlama Pertama</option>
+          <option value="desc">Terbaru</option>
+          <option value="asc">Terlama</option>
         </select>
 
         {statusFilter !== "pending" && (
@@ -486,8 +497,8 @@ export default function UserInquiriesAdmin() {
       </div>
 
       {/* Table Section */}
-      <div style={{ 
-        background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)", 
+      <div style={{
+        background: "#fff", borderRadius: 16, border: "1px solid rgba(0,0,0,0.06)",
         overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
         display: "flex", flexDirection: "column", flex: 1, minHeight: 0
       }}>
@@ -510,7 +521,7 @@ export default function UserInquiriesAdmin() {
               {loading ? (
                 [...Array(5)].map((_, i) => (
                   <tr key={i} style={{ borderBottom: "1px solid #f9f8f6" }}>
-                    {[1,2,3,4,5,6,7,8].map(j => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map(j => (
                       <td key={j} style={{ padding: "20px 16px" }}>
                         <div style={{ height: 13, background: "#f0ede8", borderRadius: 4, animation: "pulse 1.5s infinite" }} />
                       </td>
@@ -610,7 +621,7 @@ export default function UserInquiriesAdmin() {
             <button
               disabled={page === 1}
               onClick={() => setPage(p => p - 1)}
-              style={btn("#666", "#fff", { 
+              style={btn("#666", "#fff", {
                 padding: "6px 12px", border: "1px solid #e0ddd7",
                 opacity: page === 1 ? 0.4 : 1, cursor: page === 1 ? "default" : "pointer"
               })}
@@ -621,7 +632,7 @@ export default function UserInquiriesAdmin() {
             <button
               disabled={page >= totalPages}
               onClick={() => setPage(p => p + 1)}
-              style={btn("#666", "#fff", { 
+              style={btn("#666", "#fff", {
                 padding: "6px 12px", border: "1px solid #e0ddd7",
                 opacity: page >= totalPages ? 0.4 : 1, cursor: page >= totalPages ? "default" : "pointer"
               })}
