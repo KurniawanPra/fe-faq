@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -72,6 +73,11 @@ export default function DashboardSidebar({ onClose }: { onClose?: () => void }) 
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [passwordSuccess, setPasswordSuccess] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setUser(getUser());
@@ -185,61 +191,75 @@ export default function DashboardSidebar({ onClose }: { onClose?: () => void }) 
         </button>
       </div>
 
-      {/* Modal Ganti Password */}
-      {isModalOpen && (
+      {/* Modal Ganti Password - Render via Portal to avoid Sidebar's transform constraint */}
+      {isModalOpen && mounted && createPortal(
         <div style={{
-          position: "fixed", inset: 0, zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center",
-          background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)"
+          position: "fixed", inset: 0, zIndex: 99999, display: "flex", alignItems: "center", justifyContent: "center",
+          background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)",
+          padding: 20
         }}>
-          <div style={{ background: "#fff", padding: 24, borderRadius: 12, width: "90%", maxWidth: 400, boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}>
-            <h2 style={{ margin: "0 0 16px 0", fontSize: 18 }}>Ganti Password</h2>
-            {passwordError && <div style={{ color: "red", fontSize: 13, marginBottom: 16 }}>{passwordError}</div>}
-            {passwordSuccess && <div style={{ color: "green", fontSize: 13, marginBottom: 16 }}>Password berhasil diubah!</div>}
-            <form onSubmit={handlePasswordSubmit} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ background: "#fff", padding: 32, borderRadius: 20, width: "100%", maxWidth: 420, boxShadow: "0 20px 50px rgba(0,0,0,0.2)" }}>
+            <h2 style={{ margin: "0 0 8px 0", fontSize: 22, fontWeight: 800, color: '#1f2937' }}>Ganti Password</h2>
+            <p style={{ margin: "0 0 24px 0", fontSize: 14, color: '#6b7280' }}>Pastikan password baru Anda kuat dan sulit ditebak.</p>
+            
+            {passwordError && <div style={{ color: "#ef4444", background: '#fef2f2', padding: '10px 14px', borderRadius: 8, fontSize: 13, marginBottom: 16, border: '1px solid #fee2e2' }}>{passwordError}</div>}
+            {passwordSuccess && <div style={{ color: "#10b981", background: '#f0fdf4', padding: '10px 14px', borderRadius: 8, fontSize: 13, marginBottom: 16, border: '1px solid #dcfce7' }}>Password berhasil diubah!</div>}
+            
+            <form onSubmit={handlePasswordSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               <div>
-                <label style={{ display: "block", fontSize: 13, marginBottom: 4 }}>Password Saat Ini</label>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 6, fontWeight: 600, color: '#374151' }}>Password Saat Ini</label>
                 <input
                   type="password" required
+                  placeholder="••••••••"
                   value={passwordData.current_password}
                   onChange={(e) => setPasswordData({ ...passwordData, current_password: e.target.value })}
-                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, boxSizing: "border-box" }}
+                  style={{ width: "100%", padding: "12px 16px", border: "1.5px solid #e5e7eb", borderRadius: 10, boxSizing: "border-box", fontSize: 14, outline: 'none' }}
                 />
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 13, marginBottom: 4 }}>Password Baru</label>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 6, fontWeight: 600, color: '#374151' }}>Password Baru</label>
                 <input
                   type="password" required minLength={6}
+                  placeholder="••••••••"
                   value={passwordData.new_password}
                   onChange={(e) => setPasswordData({ ...passwordData, new_password: e.target.value })}
-                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, boxSizing: "border-box" }}
+                  style={{ width: "100%", padding: "12px 16px", border: "1.5px solid #e5e7eb", borderRadius: 10, boxSizing: "border-box", fontSize: 14, outline: 'none' }}
                 />
               </div>
               <div>
-                <label style={{ display: "block", fontSize: 13, marginBottom: 4 }}>Konfirmasi Password Baru</label>
+                <label style={{ display: "block", fontSize: 13, marginBottom: 6, fontWeight: 600, color: '#374151' }}>Konfirmasi Password Baru</label>
                 <input
                   type="password" required minLength={6}
+                  placeholder="••••••••"
                   value={passwordData.new_password_confirmation}
                   onChange={(e) => setPasswordData({ ...passwordData, new_password_confirmation: e.target.value })}
-                  style={{ width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, boxSizing: "border-box" }}
+                  style={{ width: "100%", padding: "12px 16px", border: "1.5px solid #e5e7eb", borderRadius: 10, boxSizing: "border-box", fontSize: 14, outline: 'none' }}
                 />
               </div>
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8 }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 12, marginTop: 12 }}>
                 <button
                   type="button" onClick={() => setIsModalOpen(false)}
-                  style={{ padding: "8px 16px", background: "none", border: "1px solid #ddd", borderRadius: 6, cursor: "pointer" }}
+                  style={{ padding: "12px 20px", background: "#f3f4f6", border: "none", borderRadius: 10, cursor: "pointer", fontWeight: 600, color: '#4b5563', fontSize: 14 }}
                 >
                   Batal
                 </button>
                 <button
                   type="submit" disabled={passwordLoading}
-                  style={{ padding: "8px 16px", background: "#0f0f0f", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer" }}
+                  style={{ 
+                    padding: "12px 24px", 
+                    background: "linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)", 
+                    color: "#fff", border: "none", borderRadius: 10, cursor: "pointer", 
+                    fontWeight: 600, fontSize: 14,
+                    boxShadow: '0 4px 12px rgba(79, 70, 229, 0.2)'
+                  }}
                 >
-                  {passwordLoading ? "Menyimpan..." : "Simpan"}
+                  {passwordLoading ? "Menyimpan..." : "Simpan Perubahan"}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </aside>
   );
