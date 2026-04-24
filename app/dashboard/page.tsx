@@ -84,7 +84,7 @@ function BarChart({ data, labelKey }: { data: any[]; labelKey: string }) {
   };
 
   return (
-    <div style={{ padding: "20px 0", overflowX: "auto", scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div style={{ padding: "20px 0", overflowX: "auto", scrollbarWidth: 'none', msOverflowStyle: 'none', display: 'flex', justifyContent: 'center' }}>
       <svg 
         width={Math.max(data.length * gap, 300)} 
         height={H + 60} 
@@ -307,7 +307,7 @@ export default function DashboardPage() {
             7 HARI TERAKHIR
           </div>
         </div>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', minHeight: 220 }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', minHeight: 220 }}>
           {perHari.length > 0
             ? <BarChart data={perHari} labelKey="hari" />
             : <div style={{ height: 200, width: '100%', display: "flex", alignItems: "center", justifyContent: "center",
