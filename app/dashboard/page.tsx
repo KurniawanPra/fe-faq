@@ -59,20 +59,15 @@ function DonutChart({ resolved, pending }: { resolved: number; pending: number }
 
 // ─── Bar Chart (inquiry per hari) ─────────────────────────────────────────────
 
-function BarChart({ data }: { data: { hari: string; count: number }[] }) {
-  const max = Math.max(...data.map(d => d.count), 5); // min max 5 biar gak terlalu tinggi kalo data dikit
+function BarChart({ data, labelKey }: { data: any[]; labelKey: string }) {
+  const max = Math.max(...data.map(d => d.count), 5);
   const H   = 100;
   const barW = 20;
-  const gap = 48;
-
-  const dayLabel = (dateStr: string) => {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("id-ID", { weekday: "short" });
-  };
+  const gap = 80; // Increased gap for longer labels
 
   return (
     <div style={{ padding: "10px 0", overflowX: "auto" }}>
-      <svg width="100%" height={H + 40} viewBox={`0 0 ${data.length * gap} ${H + 40}`} style={{ overflow: "visible", maxWidth: 450 }}>
+      <svg width="100%" height={H + 50} viewBox={`0 0 ${Math.max(data.length * gap, 400)} ${H + 50}`} style={{ overflow: "visible", maxWidth: "100%" }}>
         <defs>
           <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#6366f1" />
@@ -88,7 +83,7 @@ function BarChart({ data }: { data: { hari: string; count: number }[] }) {
           const bH = (d.count / max) * H;
           
           return (
-            <g key={d.hari} className="bar-group" style={{ cursor: 'pointer' }}>
+            <g key={d[labelKey]} className="bar-group" style={{ cursor: 'pointer' }}>
               {/* Background track */}
               <rect 
                 x={x} y={0} width={barW} height={H} 
@@ -106,11 +101,11 @@ function BarChart({ data }: { data: { hari: string; count: number }[] }) {
 
               {/* Label */}
               <text 
-                x={x + barW/2} y={H + 22} 
-                textAnchor="middle" fontSize={11} fontWeight={600}
+                x={x + barW/2} y={H + 25} 
+                textAnchor="middle" fontSize={10} fontWeight={600}
                 fill="#888" fontFamily="Inter, sans-serif"
               >
-                {dayLabel(d.hari)}
+                {d[labelKey]}
               </text>
 
               {/* Value on top */}
@@ -184,7 +179,7 @@ export default function DashboardPage() {
 
   const perTopik  = stats?.pertanyaan_per_topik ?? [];
   const maxTopik  = Math.max(...perTopik.map(t => t.count), 1);
-  const perHari   = stats?.inquiry_per_hari     ?? [];
+  const perMinggu = stats?.inquiry_per_minggu   ?? [];
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", maxWidth: 1100 }}>
@@ -250,11 +245,11 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="dash-charts-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 300px", gap: 16, marginBottom: 24 }}>
 
-        {/* Bar: Inquiry per hari */}
+        {/* Bar: Inquiry per minggu */}
         <div style={card}>
-          <h2 style={{ margin: "0 0 20px", fontSize: 15, fontWeight: 600 }}>Inquiry per Hari</h2>
-          {perHari.length > 0
-            ? <BarChart data={perHari} />
+          <h2 style={{ margin: "0 0 20px", fontSize: 15, fontWeight: 600 }}>Inquiry per Minggu</h2>
+          {perMinggu.length > 0
+            ? <BarChart data={perMinggu} labelKey="minggu" />
             : <div style={{ height: 80, display: "flex", alignItems: "center", justifyContent: "center",
                 color: "#ccc", fontSize: 13 }}>Belum ada data</div>
           }

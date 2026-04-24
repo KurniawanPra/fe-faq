@@ -129,7 +129,7 @@ export interface DashboardStats {
   inquiry_pending: number;
   inquiry_resolved: number;
   pertanyaan_per_topik: { topik: string; count: number }[];
-  inquiry_per_hari: { hari: string; count: number }[];
+  inquiry_per_minggu: { minggu: string; count: number }[];
 }
 
 export interface GetQuestionsParams {
